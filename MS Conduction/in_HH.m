@@ -49,22 +49,22 @@ vstart= -70  %(mV)
 %initialize parameters of subsequent current pulse:
 t1p=10       %starting time (ms)
 t2p=11       %stopping time (ms)
-ip=100        %current applied (muA)
+ip=30        %current applied (muA)
 %
 %initialize checking parameter
 check=0      %set check=1 to enable self-checking
              %set check=0 to disable self-checking
 %Paper
-dx = 200/10000; % (cm)
+dx = 2/10000; % (cm)
 d = 10/10000; % axon diameter (cm)
-L = 2000/10000; % inter nodal distance (cm)
+L = 1000/10000; % inter nodal distance (cm)
 NL = 3.183/10000; % nodal length (cm)
 
 ra = 1.26*10^8; % axoplasmic resistance per unit axon length (ohm/cm)
 gm = 5.60*10^-9; % meylin conductance per unit length (mho/cm)
 
-Cm = 5.60*10^-9; %myelin capaciance per unit axon length (F/cm)
-Cn = 1.87*10^-11; % nodal and demyelinated axolemma capaitance per unit axon length (F/cm)
+Cm = 1.87*10^-11; %myelin capaciance per unit axon length (F/cm)
+Cn = 3.14*10^-9; % nodal and demyelinated axolemma capaitance per unit axon length (F/cm)
 
-Cstar = (Cn*NL + Cm*(dx-NL))/dx; % Equation
+Cstar = (Cn*NL + Cm*(dx-NL))/dx; % F/cm
 %C = Cstar*2*pi*d/2*10^6; %(muF/cm^2)

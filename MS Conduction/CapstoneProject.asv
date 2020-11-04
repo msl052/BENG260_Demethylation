@@ -15,9 +15,11 @@ in_HH;
 in_mhnv;
 %pNodal = (load('NodalCurrentDensity.mat','ihh').ihh)
 
+demyelinated = false;
+numnodes = 7;
 %V = zeros(numnodes,klokmax);
-ismyelin = [true, true, false, true, true, true, true];
-myelinlen = [L,L,NL,L,L,L,L];
+ismyelin = [true, true, true, true, true, true, true];
+myelinlen = [NL,NL*2,NL,L,L,L, NL ];
 for i = 1:length(ismyelin)
     
     for klok=1:klokmax
@@ -32,13 +34,12 @@ for i = 1:length(ismyelin)
       gE=gNa*ENa+gK*EK+gLbar*EL;         %gE=g*E  (current density muA/cm^2)
       
       if ismyelin(i) == false % demyelinated regions
-        im(klok) = gm*v*(10^3)/myelinlen(i); %current density (muA/cm) (x10^3 for converting to mu)
-        C = Cn*10^6/(pi*d);
+        im(klok) = gm*v*(10^3)*10000;%/myelinlen(i); %current density (muA/cm) (x10^-3 for converting to mu)
+        C = 1;
       else
         ihh(klok)=gNa*(v-ENa)+gK*(v-EK)+gLbar*(v-EL); % muA/cm^2
         im(klok) = (ihh(klok)*pi*d*NL/dx+(dx-NL)/dx*v*gm*(10^3))/myelinlen(i); % muA/cm
-        C = Cn*10^6/(pi*d);
-        %C = Cstar*10^6/(pi*d); %(muF/cm^2)
+        C = Cstar*2*pi*d/2*10^6; %(muF/cm^2)
         %im(klok) = ihh(klok);
       end
       

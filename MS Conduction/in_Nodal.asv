@@ -49,7 +49,7 @@ vstart= -70  %(mV)
 %initialize parameters of subsequent current pulse:
 t1p=10       %starting time (ms)
 t2p=11       %stopping time (ms)
-ip=100       %current applied (muA)
+ip=10000       %current applied (muA)
 %
 %initialize checking parameter
 check=0      %set check=1 to enable self-checking
