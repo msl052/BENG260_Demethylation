@@ -29,7 +29,7 @@ for klok=1:klokmax
   v=(v+(dt/C)*(gE+izero(t)))/(1+(dt/C)*g);
   if(check)
     E=gE/g;
-    chv=C*(v-v_old)/dt+g*(v-E)-izero(t)
+    chv=C*(v-v_old)/dt+g*(v-E)-izero(t);
   end
   %store results for future plotting:
   mhn_plot(:,klok)=[m h n]';

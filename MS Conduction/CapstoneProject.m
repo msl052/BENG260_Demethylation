@@ -16,8 +16,8 @@ in_mhnv;
 %pNodal = (load('NodalCurrentDensity.mat','ihh').ihh)
 
 %V = zeros(numnodes,klokmax);
-ismyelin = [true, true, false, true, true, true, true];
-myelinlen = [L,L,NL,L,L,L,L];
+ismyelin = [true, true, true, true true true, false, false, false, false, true, true, true true];
+myelinlen = [L,L,L,L3,A,B,NL,NL,NL,NL,L,L,L,L];
 for i = 1:length(ismyelin)
     
     for klok=1:klokmax
@@ -53,7 +53,7 @@ for i = 1:length(ismyelin)
       
       if(check)
         E=gE/g;
-        chv=C*(v-v_old)/dt+g*(v-E)-izero(t)
+        chv=C*(v-v_old)/dt+g*(v-E)-izero(t);
       end
       
       %store results for future plotting:
@@ -84,10 +84,16 @@ for i = 1:length(ismyelin)
 end
 figure;
 subplot(3,1,1), plot(t_plot,MatV);
-ylabel('Membrane potential [mV]')
+ylabel('[mV]');
+title('Membrane potential');
+legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','D1','Others Show No Action Potential');
 subplot(3,1,2), plot(t_plot,MatI);
 ylabel('Current [muA]')
+title('Ionic Membrane Current Density for Demyelinated Regions');
+legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','Others Show No Current');
 subplot(3,1,3), plot(t_plot,MatIhh);
 ylabel('Current [muA]')
 xlabel('time [ms]')
+title('Hodgkin-Huxley Current Density');
+legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','D1 (No Current)','D2 (No Current)','D3 (No Current)','D4 ((Right Side) Yellow Spike)','Others Show No Current');
 

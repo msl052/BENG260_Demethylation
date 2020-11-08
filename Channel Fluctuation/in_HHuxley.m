@@ -34,7 +34,7 @@ pK = 18     % channels/um^2
 %
 %initialize time step and experiment duration:
 dt=0.1     %time step duration (ms)
-tmax=50    %duration of experiment (ms)
+tmax=100    %duration of experiment (ms)
 %total number of time steps in the experiment:
 klokmax=ceil(tmax/dt)
 %

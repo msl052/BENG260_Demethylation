@@ -26,7 +26,7 @@ EL = -59   %(mV)
 %
 %initialize time step and experiment duration:
 dt=0.1     %time step duration (ms)
-tmax=50    %duration of experiment (ms)
+tmax=100    %duration of experiment (ms)
 %total number of time steps in the experiment:
 klokmax=ceil(tmax/dt)
 %
@@ -57,7 +57,10 @@ check=0      %set check=1 to enable self-checking
 %Paper
 dx = 2/10000; % (cm)
 d = 10/10000; % axon diameter (cm)
-L = 1000/10000; % inter nodal distance (cm)
+L = 1560/10000; % inter nodal distance (cm)
+L3 = 1560/10000;
+A = 400/10000;
+B = 400/10000;
 NL = 3.183/10000; % nodal length (cm)
 
 ra = 1.26*10^8; % axoplasmic resistance per unit axon length (ohm/cm)
