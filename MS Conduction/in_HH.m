@@ -26,7 +26,7 @@ EL = -59   %(mV)
 %
 %initialize time step and experiment duration:
 dt=0.1     %time step duration (ms)
-tmax=100    %duration of experiment (ms)
+tmax=50    %duration of experiment (ms)
 %total number of time steps in the experiment:
 klokmax=ceil(tmax/dt)
 %
@@ -49,7 +49,7 @@ vstart= -70  %(mV)
 %initialize parameters of subsequent current pulse:
 t1p=10       %starting time (ms)
 t2p=11       %stopping time (ms)
-ip=30        %current applied (muA)
+ip=20        %current applied (muA)
 %
 %initialize checking parameter
 check=0      %set check=1 to enable self-checking
@@ -57,10 +57,7 @@ check=0      %set check=1 to enable self-checking
 %Paper
 dx = 2/10000; % (cm)
 d = 10/10000; % axon diameter (cm)
-L = 1560/10000; % inter nodal distance (cm)
-L3 = 1560/10000;
-A = 400/10000;
-B = 400/10000;
+L = 2000/10000; % inter nodal distance (cm)
 NL = 3.183/10000; % nodal length (cm)
 
 ra = 1.26*10^8; % axoplasmic resistance per unit axon length (ohm/cm)
@@ -70,4 +67,4 @@ Cm = 1.87*10^-11; %myelin capaciance per unit axon length (F/cm)
 Cn = 3.14*10^-9; % nodal and demyelinated axolemma capaitance per unit axon length (F/cm)
 
 Cstar = (Cn*NL + Cm*(dx-NL))/dx; % F/cm
-%C = Cstar*2*pi*d/2*10^6; %(muF/cm^2)
+%C = Cstar*pi*d*10^6; %(muF/cm^2)

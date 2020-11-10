@@ -16,10 +16,11 @@ in_mhnv;
 %pNodal = (load('NodalCurrentDensity.mat','ihh').ihh)
 
 %V = zeros(numnodes,klokmax);
-ismyelin = [true, true, true, true true true, false, false, false, false, true, true, true true];
-myelinlen = [L,L,L,L3,A,B,NL,NL,NL,NL,L,L,L,L];
+labels = ["2","3","A","B","D1","D2","D3","D4","4"];
+ismyelin = [true,true,true,true,false,false,false,false,true];
+myelinlen = [L,1600/10000,400/10000,400/10000,NL,NL,NL,NL,L];
+
 for i = 1:length(ismyelin)
-    
     for klok=1:klokmax
       t=klok*dt;                      %note time
       x=klok*dx;
@@ -31,13 +32,15 @@ for i = 1:length(ismyelin)
       g=gNa+gK+gLbar;         %total conductance
       gE=gNa*ENa+gK*EK+gLbar*EL;         %gE=g*E  (current density muA/cm^2)
       
+      ihh(klok)=gNa*(v-ENa)+gK*(v-EK)+gLbar*(v-EL); % muA/cm^2
       if ismyelin(i) == false % demyelinated regions
-        im(klok) = gm*v*(10^3)/myelinlen(i); %current density (muA/cm) (x10^3 for converting to mu)
-        C = Cn*10^6/(pi*d);
+        im(klok) = gm*(v+69.92)*(10^3)/myelinlen(i); %current density (muA/cm^2) (x10^3 for converting to mu)
+        C = Cstar*10^6/(pi*d);
+        %C = Cstar*10^6;
+        %C = Cm*10^6/(pi*d);
       else
-        ihh(klok)=gNa*(v-ENa)+gK*(v-EK)+gLbar*(v-EL); % muA/cm^2
-        im(klok) = (ihh(klok)*pi*d*NL/dx+(dx-NL)/dx*v*gm*(10^3))/myelinlen(i); % muA/cm
-        C = Cn*10^6/(pi*d);
+        im(klok) = (ihh(klok)*pi*d*NL/dx+(dx-NL)/dx*v*gm*(10^3))/myelinlen(i); % muA/cm^2
+        C = Cm*10^6/(pi*d);
         %C = Cstar*10^6/(pi*d); %(muF/cm^2)
         %im(klok) = ihh(klok);
       end
@@ -51,9 +54,11 @@ for i = 1:length(ismyelin)
         v=(v+(dt/C)*(gE+pI(klok)))/(1+(dt/C)*g);
       end
       
+      %Matizero(klok) = izero(t);
+      
       if(check)
         E=gE/g;
-        chv=C*(v-v_old)/dt+g*(v-E)-izero(t);
+        chv=C*(v-v_old)/dt+g*(v-E)-izero(t)
       end
       
       %store results for future plotting:
@@ -68,32 +73,53 @@ for i = 1:length(ismyelin)
     MatIhh(i,:) = ihh;
     MatI(i,:) = im;
     MatV(i,:) = v_plot;
-%     subplot(numnodes,1,i),plot(t_plot,pI);
-%     ylabel('pI [muA/cm]')
-%     legend;
+    Matmhn(i,:,:) = mhn_plot;
+
+%     figure;
 %     hold on;
-%     subplot(2,1,1),plot(t_plot,v_plot), hold on;
-%     legend('membrane potential')
-%     ylabel('Membrane potential [mV]')
-%     subplot(2,1,2),plot(t_plot,mhn_plot), hold on;
+%     plot(t_plot,mhn_plot);
 %     legend('m-gate','h-gate','n-gate')
 %     xlabel('time [ms]')
 %     ylabel('gating variable')
 
 
 end
+
 figure;
-subplot(3,1,1), plot(t_plot,MatV);
-ylabel('[mV]');
-title('Membrane potential');
-legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','D1','Others Show No Action Potential');
-subplot(3,1,2), plot(t_plot,MatI);
-ylabel('Current [muA]')
-title('Ionic Membrane Current Density for Demyelinated Regions');
-legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','Others Show No Current');
-subplot(3,1,3), plot(t_plot,MatIhh);
-ylabel('Current [muA]')
+subplot(2,1,1), plot(t_plot,MatV);
+[M,I] = max(MatV,[],2);
+for i = 1:length(labels)
+    if M(i) > -69
+        text(t_plot(I(i)),MatV(i,I(i)),labels(i));
+    end
+end
+ylabel('Membrane potential [mV]')
+legend(labels);
+subplot(2,1,2), plot(t_plot,MatI);
+[M,I] = max(MatI,[],2);
+for i = 1:length(labels)
+    if M(i) > 1
+        text(t_plot(I(i)),MatI(i,I(i)),labels(i));
+    end
+end
+Ipks = islocalmax(MatI,2);
+ylabel('Current [muA/cm^2]')
+legend(labels);
+%subplot(3,1,3), plot(t_plot,MatIhh);
+%ylabel('Current density [muA/cm^2]')
 xlabel('time [ms]')
-title('Hodgkin-Huxley Current Density');
-legend('IN1','IN2','IN3','IN(Shortened)','INA','INB','D1 (No Current)','D2 (No Current)','D3 (No Current)','D4 ((Right Side) Yellow Spike)','Others Show No Current');
+
+% figure;
+% hold on;
+% plot(t_plot,Matizero);
+% xlabel('time [ms]')
+% ylabel('stimulus [mua/cm^2]')
+% ylim([0,100]);
+
+% figure;
+% hold on;
+% plot(t_plot,Matmhn);
+% legend('m-gate','h-gate','n-gate')
+% xlabel('time [ms]')
+% ylabel('gating variable')
 
